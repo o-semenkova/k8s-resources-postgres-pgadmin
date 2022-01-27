@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f /Users/osem/Desktop/docker-compose.yml -o /Users/osem/Desktop/k8s-resources-postgres-pgadmin
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: pgadmin
+  name: pgadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: pgadmin
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f /Users/osem/Desktop/docker-compose.yml -o /Users/osem/Desktop/k8s-resources-postgres-pgadmin
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: pgadmin
+    spec:
+      containers:
+        - env:
+            - name: PGADMIN_DEFAULT_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: pgadmin_email
+            - name: PGADMIN_DEFAULT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: pgadmin-password
+          image: dpage/pgadmin4:latest
+          name: pgadmin
+          ports:
+            - containerPort: 80
+          resources: {}
+      restartPolicy: Always
+status: {}

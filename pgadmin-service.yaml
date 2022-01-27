@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f /Users/osem/Desktop/docker-compose.yml -o /Users/osem/Desktop/k8s-resources-postgres-pgadmin
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: pgadmin
+  name: pgadmin
+spec:
+  ports:
+    - name: "5050"
+      port: 5050
+      targetPort: 80
+      nodePort: 30000
+  selector:
+    io.kompose.service: pgadmin
+  type: LoadBalancer
+status:
+  loadBalancer: {}
